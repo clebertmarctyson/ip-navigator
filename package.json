@@ -1,0 +1,37 @@
+{
+  "name": "@marctysonclebert/ip-navigator",
+  "version": "1.0.0",
+  "description": "ip-navigator is a versatile IP address package for developers and administrators. Manage, convert, and calculate IP addresses effortlessly. Simplify networking tasks with ease. Boost productivity now!",
+  "main": "./index.ts",
+  "scripts": {
+    "test": "jest --coverage",
+    "start": "node ./dist/index.js",
+    "dev": "nodemon ./index.ts"
+  },
+  "keywords": [
+    "IP addresses",
+    "Subnetting",
+    "Network management",
+    "Validity checking",
+    "Address calculation",
+    "Subnet masks",
+    "Network visualization",
+    "Address manipulation",
+    "IP information",
+    "Network exploration"
+  ],
+  "author": "clebertmarctyson <marctysonclebert9@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/clebertmarctyson/ip-navigator/issues"
+  },
+  "homepage": "https://github.com/clebertmarctyson/ip-navigator#readme",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^29.5.2",
+    "@types/node": "^20.3.1",
+    "jest": "^29.5.0",
+    "ts-jest": "^29.1.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.3"
+  }
+}
