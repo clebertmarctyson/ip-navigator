@@ -1,10 +1,12 @@
 {
   "name": "@marctysonclebert/ip-navigator",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "ip-navigator is a versatile IP address package for developers and administrators. Manage, convert, and calculate IP addresses effortlessly. Simplify networking tasks with ease. Boost productivity now!",
   "main": "./dist/index.js",
   "scripts": {
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
     "IP addresses",
