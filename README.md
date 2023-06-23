@@ -8,7 +8,6 @@
   - [Features](#features)
   - [Installation](#installation)
   - [Usage](#usage)
-  - [Documentation](#documentation)
     - [`isValidIPAddress(ipAddress: string): boolean`](#isvalidipaddressipaddress-string-boolean)
     - [`isValidBinaryIPAddress(binaryIPAddress: string): boolean`](#isvalidbinaryipaddressbinaryipaddress-string-boolean)
     - [`ipToBinary(ipAddress: string): string`](#iptobinaryipaddress-string-string)
@@ -52,68 +51,6 @@ npm install @marctysonclebert/ip-navigator
 ```
 
 ## Usage
-
-```javascript
-import {
-  isValidIPAddress,
-  isValidBinaryIPAddress,
-  ipToBinary,
-  binaryToIP,
-  calculateSubnetMask,
-  calculateNetworkAddress,
-  calculateBroadcastAddress,
-  getNextIPAddress,
-  getPreviousIPAddress,
-  isIPAddressInSubnet,
-  getAvailableHostsCount,
-  areIPAddressesEqual,
-} from "@marctysonclebert/ip-navigator";
-
-const ipAddress = "192.168.0.1";
-
-const isValid = isValidIPAddress(ipAddress);
-
-const binaryIP = ipToBinary(ipAddress);
-
-const prefixLength = 24;
-const subnetMask = calculateSubnetMask(prefixLength);
-
-const subnet = "192.168.0.0/24";
-const isInRange = isIPAddressInSubnet(ipAddress, subnet);
-
-const networkAddress = calculateNetworkAddress(ipAddress, subnetMask);
-
-const broadcastAddress = calculateBroadcastAddress(ipAddress, subnetMask);
-
-const nextIP = getNextIPAddress(ipAddress);
-
-const previousIP = getPreviousIPAddress(ipAddress);
-
-const availableHosts = getAvailableHostsCount(subnetMask);
-
-const otherIPAddress = "192.168.0.2";
-
-const areEqual = areIPAddressesEqual(ipAddress, otherIPAddress);
-
-console.log(`Is ${ipAddress} valid? ${isValid}`);
-console.log(`Binary representation of ${ipAddress}: ${binaryIP}`);
-console.log(`Subnet mask for prefix length ${prefixLength}: ${subnetMask}`);
-console.log(`Is ${ipAddress} in the subnet ${subnet}? ${isInRange}`);
-console.log(
-  `Network address for ${ipAddress} with subnet mask ${subnetMask}: ${networkAddress}`
-);
-console.log(
-  `Broadcast address for ${ipAddress} with subnet mask ${subnetMask}: ${broadcastAddress}`
-);
-console.log(`Next IP address after ${ipAddress}: ${nextIP}`);
-console.log(`Previous IP address before ${ipAddress}: ${previousIP}`);
-console.log(
-  `Number of available hosts with subnet mask ${subnetMask}: ${availableHosts}`
-);
-console.log(`Are ${ipAddress} and ${otherIPAddress} equal? ${areEqual}`);
-```
-
-## Documentation
 
 ### `isValidIPAddress(ipAddress: string): boolean`
 
