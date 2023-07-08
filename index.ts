@@ -140,7 +140,7 @@ export const calculateSubnetMask = (prefixLength: number): string => {
   return subnetMaskString;
 };
 
-// TODO : PENDING
+// TODO : IN PROGRESS
 /**
  * Calculates the network address based on an IP address and subnet mask.
  * @param {string} ipAddress - The IP address.
@@ -154,7 +154,7 @@ export const calculateNetworkAddress = (
   return "255.255.255.255";
 };
 
-// TODO : PENDING
+// TODO : NOT STARTED
 /**
  * Calculates the broadcast address based on an IP address and subnet mask.
  * @param {string} ipAddress - The IP address.
@@ -168,7 +168,7 @@ export const calculateBroadcastAddress = (
   return "255.255.255.255";
 };
 
-// TODO : PENDING
+// TODO : NOT STARTED
 /**
  * Gets the next IP address in sequential order.
  * @param {string} ipAddress - The current IP address.
@@ -178,7 +178,7 @@ export const getNextIPAddress = (ipAddress: string): string => {
   return "255.255.255.255";
 };
 
-// TODO : PENDING
+// TODO : NOT STARTED
 /**
  * Gets the previous IP address in sequential order.
  * @param {string} ipAddress - The current IP address.
@@ -188,7 +188,7 @@ export const getPreviousIPAddress = (ipAddress: string): string => {
   return "255.255.255.255";
 };
 
-// TODO : PENDING
+// TODO : NOT STARTED
 /**
  * Checks if an IP address is in a given subnet.
  * @param {string} ipAddress - The IP address to check.
@@ -204,7 +204,7 @@ export const isIPAddressInSubnet = (
   return true;
 };
 
-// TODO : PENDING
+// TODO : NOT STARTED
 /**
  * Gets the number of available hosts in a subnet.
  * @param {string} subnetMask - The subnet mask.
@@ -214,7 +214,7 @@ export const getAvailableHostsCount = (subnetMask: string): number => {
   return 12;
 };
 
-// TODO : PENDING
+// TODO : NOT STARTED
 /**
  * Checks if two IP addresses are equal.
  * @param {string} firstIpAddress - The first IP address.
