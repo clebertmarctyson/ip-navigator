@@ -1,5 +1,18 @@
 export function isValidIPAddress(ipAddress: string): boolean {
-  // Implementation here
+  const ipParts = ipAddress.split(".");
+
+  if (ipParts.length !== 4) {
+    return false;
+  }
+
+  for (const part of ipParts) {
+    const partAsNumber = parseInt(part, 10);
+
+    if (isNaN(partAsNumber) || partAsNumber < 0 || partAsNumber > 255) {
+      return false;
+    }
+  }
+
   return true;
 }
 
