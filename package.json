@@ -9,6 +9,9 @@
     "LICENSE",
     "README.md"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsc",
     "prepublishOnly": "npm run build"
