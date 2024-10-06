@@ -1,3 +1,5 @@
+import { ipToBinary } from "../conversion/index";
+
 /**
  * Validates whether the given string is a valid IPv4 address.
  *
@@ -22,15 +24,10 @@
  * - It then validates each octet to ensure it's a number between 0 and 255.
  * - The function also checks for leading zeros, which are not allowed in standard IPv4 notation.
  *
- * @status IN_PROGRESS
+ * @status DONE
  *
  */
-export function isValidIPAddress(ipAddress: string): boolean {
-  // Check for leading or trailing whitespace
-  if (ipAddress.trim() !== ipAddress) {
-    return false;
-  }
-
+export const isValidIPAddress = (ipAddress: string): boolean => {
   // Split the IP address into octets
   const octets = ipAddress.split(".");
 
@@ -51,18 +48,23 @@ export function isValidIPAddress(ipAddress: string): boolean {
       return false;
     }
 
+    // Check if octect has leading or trailing whitespace
+    if (octet.trim() !== octet) {
+      return false;
+    }
+
     // Parse the octet to a number
-    const num = parseInt(octet, 10);
+    const num = Number.parseInt(octet, 10);
 
     // Check if it's a valid number between 0 and 255
-    if (isNaN(num) || num < 0 || num > 255) {
+    if (Number.isNaN(num) || num < 0 || num > 255) {
       return false;
     }
   }
 
   // If we've passed all checks, the IP is valid
   return true;
-}
+};
 
 /**
  * Validates whether the given string is a valid subnet mask.
@@ -86,12 +88,18 @@ export function isValidIPAddress(ipAddress: string): boolean {
  * - The binary representation of the entire mask must be a continuous sequence of 1s followed by 0s.
  * - Common valid subnet masks include 255.0.0.0, 255.255.0.0, 255.255.255.0, etc.
  *
- * @status TODO
+ * @status DONE
+ *
  */
-export function isValidSubnetMask(subnetMask: string): boolean {
-  // Implementation here
-  return true;
-}
+export const isValidSubnetMask = (subnetMask: string): boolean => {
+  if (!isValidIPAddress(subnetMask)) return false;
+
+  const binaryIP = ipToBinary(subnetMask);
+
+  const zeroIndex = binaryIP.indexOf("0");
+
+  return zeroIndex === -1 || !binaryIP.slice(zeroIndex).includes("1");
+};
 
 /**
  * Validates whether the given string is a valid CIDR notation.
@@ -105,70 +113,29 @@ export function isValidSubnetMask(subnetMask: string): boolean {
  * @example
  * isValidCIDR('192.168.1.0/24');   // returns true
  * isValidCIDR('192.168.1.0/33');   // returns false
- * isValidCIDR('2001:db8::/32');    // returns true (for IPv6)
  * isValidCIDR('192.168.1.0');      // returns false (missing prefix)
  *
  * @remarks
- * - The function checks if the input is a valid IP address (IPv4 or IPv6) followed by a '/' and a number.
- * - For IPv4, the prefix length should be between 0 and 32.
- * - For IPv6, the prefix length should be between 0 and 128.
- * - The function should work for both IPv4 and IPv6 addresses.
+ * - The function checks if the input is a valid IP address followed by a '/' and a number.
+ * - The prefix length should be between 0 and 32.
+ *
+ * @status DONE
+ *
  */
-export function isValidCIDR(cidr: string): boolean {
-  // Implementation here
-  return true;
-}
+export const isValidCIDR = (cidr: string): boolean => {
+  if (!cidr.includes("/") || cidr.trim() !== cidr) return false;
 
-/**
- * Checks if the given string is a valid IPv4 address.
- *
- * This function validates whether the input string conforms to the format of an IPv4 address.
- * An IPv4 address consists of four octets, each ranging from 0 to 255, separated by dots.
- *
- * @param {string} ipAddress - The IP address to validate.
- * @returns {boolean} Returns true if the address is a valid IPv4 address, false otherwise.
- *
- * @example
- * isIPv4('192.168.1.1');   // returns true
- * isIPv4('256.1.2.3');     // returns false
- * isIPv4('192.168.1');     // returns false
- * isIPv4('2001:db8::1');   // returns false (IPv6)
- *
- * @remarks
- * - The function checks if the input is a string of four dot-separated numbers.
- * - Each number (octet) must be between 0 and 255.
- * - The function does not accept leading zeros in octets (e.g., '192.168.01.1' is invalid).
- * - This function is more specific than isValidIPAddress as it only validates IPv4.
- */
-export function isIPv4(ipAddress: string): boolean {
-  // Implementation here
-  return true;
-}
+  const values = cidr.split("/");
 
-/**
- * Checks if the given string is a valid IPv6 address.
- *
- * This function validates whether the input string conforms to the format of an IPv6 address.
- * An IPv6 address consists of eight groups of four hexadecimal digits, each group representing 16 bits.
- * The groups are separated by colons (:).
- *
- * @param {string} ipAddress - The IP address to validate.
- * @returns {boolean} Returns true if the address is a valid IPv6 address, false otherwise.
- *
- * @example
- * isIPv6('2001:0db8:85a3:0000:0000:8a2e:0370:7334');   // returns true
- * isIPv6('2001:db8:85a3::8a2e:370:7334');              // returns true
- * isIPv6('::1');                                       // returns true (loopback address)
- * isIPv6('192.168.1.1');                               // returns false (IPv4)
- *
- * @remarks
- * - The function should accept the full form of IPv6 addresses.
- * - It should also accept the shortened form where consecutive zero groups are replaced with '::'.
- * - Leading zeros in groups can be omitted.
- * - The function should handle special IPv6 notations like the loopback address '::1'.
- * - IPv4-mapped IPv6 addresses (e.g., '::ffff:192.0.2.128') should also be considered valid.
- */
-export function isIPv6(ipAddress: string): boolean {
-  // Implementation here
-  return true;
-}
+  if (values.length !== 2) return false;
+
+  const [ipAddress, prefix] = values;
+
+  if (!Number.isInteger(Number(prefix)) || !isValidIPAddress(ipAddress)) {
+    return false;
+  }
+
+  const num = Number.parseInt(prefix, 10);
+
+  return num >= 0 && num <= 32;
+};

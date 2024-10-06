@@ -1,3 +1,5 @@
+import { isValidIPAddress } from "../validation/index";
+
 /**
  * Converts an IPv4 address to its binary representation.
  *
@@ -15,11 +17,27 @@
  * - The function assumes that the input is a valid IPv4 address.
  * - Each octet in the output is padded to 8 bits.
  * - The octets in the output are separated by dots for readability.
+ *
+ * @status DONE
+ *
  */
-export function ipToBinary(ipAddress: string): string {
-  // Implementation here
-  return "11000000.10101000.00000001.00000001";
-}
+export const ipToBinary = (ipAddress: string): string => {
+  // Check if the IP address is valid
+  if (!isValidIPAddress(ipAddress)) {
+    throw new Error("Invalid IP address");
+  }
+
+  // Split the IP address into octets
+  const octets = ipAddress.split(".");
+
+  // Convert each octet to binary and pad to 8 bits
+  const binaryOctets = octets.map((octet) => {
+    return Number.parseInt(octet, 10).toString(2).padStart(8, "0");
+  });
+
+  // Join the binary octets with dots
+  return binaryOctets.join(".");
+};
 
 /**
  * Converts a binary representation of an IPv4 address to its decimal notation.
@@ -38,11 +56,40 @@ export function ipToBinary(ipAddress: string): string {
  * - The function assumes that the input is a valid binary representation of an IPv4 address.
  * - Each octet in the input should be 8 bits long.
  * - The function expects the octets to be separated by dots.
+ *
+ * @status DONE
+ *
  */
-export function binaryToIP(binaryIP: string): string {
-  // Implementation here
-  return "192.168.1.1";
-}
+export const binaryToIP = (binaryIP: string): string => {
+  // Check if the binary IP has the correct length
+  if (binaryIP.length !== 35) {
+    throw new Error("Invalid binary IP address");
+  }
+
+  // Check if the binary IP contains only 0s, 1s, and dots
+  Array.from(binaryIP).forEach((char) => {
+    if (char !== "0" && char !== "1" && char !== ".") {
+      throw new Error("Invalid binary IP address");
+    }
+  });
+
+  if (binaryIP.split(".").length !== 4) {
+    throw new Error("Invalid binary IP address");
+  }
+
+  // Split the binary IP into octets
+  const binaryOctets = binaryIP.split(".");
+
+  const decimalOctets = binaryOctets.map((binaryOctet) => {
+    if (binaryOctet.length !== 8) {
+      throw new Error("Invalid binary IP address");
+    }
+
+    return parseInt(binaryOctet, 2).toString();
+  });
+
+  return decimalOctets.join(".");
+};
 
 /**
  * Converts an IPv4 address to its integer representation.
@@ -61,6 +108,9 @@ export function binaryToIP(binaryIP: string): string {
  * - The function assumes that the input is a valid IPv4 address.
  * - The returned integer is a 32-bit unsigned integer.
  * - The conversion treats the IP address as big-endian.
+ *
+ * @status TODO
+ *
  */
 export function ipToInteger(ipAddress: string): number {
   // Implementation here
@@ -83,6 +133,9 @@ export function ipToInteger(ipAddress: string): number {
  * @remarks
  * - The function assumes that the input is a valid 32-bit unsigned integer.
  * - The conversion treats the integer as big-endian.
+ *
+ * @status TODO
+ *
  */
 export function integerToIP(integer: number): string {
   // Implementation here

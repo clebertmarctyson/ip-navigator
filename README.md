@@ -4,19 +4,20 @@ A comprehensive TypeScript/JavaScript package for IP address manipulation and su
 
 ## Table of Contents
 
-- [ip-navigator](#ip-navigator)
-  - [Table of Contents](#table-of-contents)
-  - [Description](#description)
-  - [Features](#features)
-  - [Installation](#installation)
-  - [Usage](#usage)
-    - [TypeScript](#typescript)
-    - [JavaScript](#javascript)
-  - [API Reference](#api-reference)
-  - [Documentation](#documentation)
-  - [Contributing](#contributing)
-  - [License](#license)
-  - [Bugs and Issues](#bugs-and-issues)
+- [Description](#description)
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+  - [TypeScript](#typescript)
+  - [JavaScript](#javascript)
+- [API Reference](#api-reference)
+  - [Validation Functions](#validation-functions)
+  - [Conversion Functions](#conversion-functions)
+  - [Subnet Operations](#subnet-operations)
+  - [IP Address Operations](#ip-address-operations)
+- [Contributing](#contributing)
+- [License](#license)
+- [Bugs and Issues](#bugs-and-issues)
 
 ## Description
 
@@ -80,25 +81,163 @@ console.log(ipToBinary("192.168.1.1")); // '11000000.10101000.00000001.00000001'
 
 ## API Reference
 
-The ip-navigator package provides a wide range of functions categorized into four main areas:
+### Validation Functions
 
-1. Validation Functions
-2. Conversion Functions
-3. Subnet Operations
-4. IP Address Operations
+#### isValidIPAddress(ipAddress: string): boolean
 
-For a quick overview of all available functions, see the [Documentation](#documentation) section below.
+Validates whether the given string is a valid IPv4 address.
 
-## Documentation
+```typescript
+isValidIPAddress("192.168.1.1"); // returns true
+isValidIPAddress("256.1.2.3"); // returns false
+```
 
-Detailed documentation for each category of functions is available in separate files:
+#### isValidSubnetMask(subnetMask: string): boolean
 
-- [Validation Functions](docs/validation.md)
-- [Conversion Functions](docs/conversion.md)
-- [Subnet Operations](docs/subnet-operations.md)
-- [IP Address Operations](docs/ip-address-operations.md)
+Checks if the given string is a valid subnet mask.
 
-Each documentation file provides in-depth information about the functions, including descriptions, parameters, return values, and usage examples.
+```typescript
+isValidSubnetMask("255.255.255.0"); // returns true
+isValidSubnetMask("255.255.256.0"); // returns false
+```
+
+#### isValidCIDR(cidr: string): boolean
+
+Checks if the given string is a valid CIDR notation.
+
+```typescript
+isValidCIDR("192.168.1.0/24"); // returns true
+isValidCIDR("192.168.1.0/33"); // returns false
+```
+
+### Conversion Functions
+
+#### ipToBinary(ipAddress: string): string
+
+Converts an IPv4 address to its binary representation.
+
+```typescript
+ipToBinary("192.168.1.1"); // returns '11000000.10101000.00000001.00000001'
+```
+
+#### binaryToIP(binaryIP: string): string
+
+Converts a binary representation of an IP address to its decimal format.
+
+```typescript
+binaryToIP("11000000.10101000.00000001.00000001"); // returns '192.168.1.1'
+```
+
+#### ipToInteger(ipAddress: string): number
+
+Converts an IPv4 address to its integer representation.
+
+```typescript
+ipToInteger("192.168.1.1"); // returns 3232235777
+```
+
+#### integerToIP(integer: number): string
+
+Converts an integer representation of an IP address to its decimal format.
+
+```typescript
+integerToIP(3232235777); // returns '192.168.1.1'
+```
+
+### Subnet Operations
+
+#### calculateSubnetMask(prefixLength: number): string
+
+Calculates the subnet mask based on the given prefix length.
+
+```typescript
+calculateSubnetMask(24); // returns '255.255.255.0'
+```
+
+#### calculateNetworkAddress(ipAddress: string, subnetMask: string): string
+
+Calculates the network address based on an IP address and subnet mask.
+
+```typescript
+calculateNetworkAddress("192.168.1.100", "255.255.255.0"); // returns '192.168.1.0'
+```
+
+#### calculateBroadcastAddress(ipAddress: string, subnetMask: string): string
+
+Calculates the broadcast address based on an IP address and subnet mask.
+
+```typescript
+calculateBroadcastAddress("192.168.1.100", "255.255.255.0"); // returns '192.168.1.255'
+```
+
+#### getSubnetInfo(ipAddress: string, subnetMask: string): SubnetInfo
+
+Retrieves comprehensive information about a subnet.
+
+```typescript
+getSubnetInfo("192.168.1.100", "255.255.255.0");
+// returns {
+//   networkAddress: '192.168.1.0',
+//   broadcastAddress: '192.168.1.255',
+//   totalHosts: 256,
+//   usableHosts: 254,
+//   firstUsableHost: '192.168.1.1',
+//   lastUsableHost: '192.168.1.254'
+// }
+```
+
+### IP Address Operations
+
+#### getNextIPAddress(ipAddress: string): string
+
+Returns the next IP address in sequential order.
+
+```typescript
+getNextIPAddress("192.168.1.1"); // returns '192.168.1.2'
+```
+
+#### getPreviousIPAddress(ipAddress: string): string
+
+Returns the previous IP address in sequential order.
+
+```typescript
+getPreviousIPAddress("192.168.1.2"); // returns '192.168.1.1'
+```
+
+#### isIPAddressInSubnet(ipAddress: string, networkAddress: string, subnetMask: string): boolean
+
+Checks if an IP address belongs to a given subnet.
+
+```typescript
+isIPAddressInSubnet("192.168.1.100", "192.168.1.0", "255.255.255.0"); // returns true
+```
+
+#### isPublicIP(ipAddress: string): boolean
+
+Checks if an IP address is a public IP address.
+
+```typescript
+isPublicIP("8.8.8.8"); // returns true
+isPublicIP("192.168.1.1"); // returns false
+```
+
+#### isPrivateIP(ipAddress: string): boolean
+
+Checks if an IP address is a private IP address.
+
+```typescript
+isPrivateIP("192.168.1.1"); // returns true
+isPrivateIP("8.8.8.8"); // returns false
+```
+
+#### getIPRange(startIP: string, endIP: string): string[]
+
+Generates an array of IP addresses within the specified range.
+
+```typescript
+getIPRange("192.168.1.1", "192.168.1.3");
+// returns ['192.168.1.1', '192.168.1.2', '192.168.1.3']
+```
 
 ## Contributing
 
@@ -110,7 +249,7 @@ We welcome contributions from the community! If you'd like to contribute to ip-n
 4. Commit your changes and push to your fork
 5. Create a pull request with a clear description of your changes
 
-For more detailed information, please see our [CONTRIBUTING.md](CONTRIBUTING.md) file.
+Please ensure that your code adheres to the existing style and that all tests pass before submitting a pull request.
 
 ## License
 
@@ -118,4 +257,13 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Bugs and Issues
 
-If you encounter any bugs or have suggestions for improvements, please report them on our [GitHub Issues page](https://github.com/clebertmarctyson/ip-navigator/issues).
+If you encounter any bugs or have suggestions for improvements, please report them on our [GitHub Issues page](https://github.com/clebertmarctyson/ip-navigator/issues). When reporting an issue, please include:
+
+- A clear and descriptive title
+- A detailed description of the issue
+- Steps to reproduce the problem
+- Expected behavior
+- Actual behavior
+- Any relevant code snippets or error messages
+
+Your feedback helps us improve ip-navigator for everyone!
