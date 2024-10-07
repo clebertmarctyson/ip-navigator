@@ -43,7 +43,7 @@ To install ip-navigator, run the following command in your terminal:
 npm install ip-navigator
 ```
 
-```shellscript
+```bash
 pnpm add ip-navigator
 ```
 
@@ -51,7 +51,7 @@ pnpm add ip-navigator
 
 ip-navigator is designed for use in TypeScript projects. Here's a basic example of how to use it:
 
-```typescript
+```javascript
 import { isValidIPAddress, ipToBinary } from "ip-navigator";
 
 // Example usage
@@ -67,7 +67,7 @@ console.log(ipToBinary("192.168.1.1")); // '11000000.10101000.00000001.00000001'
 
 Validates whether the given string is a valid IPv4 address.
 
-```typescript
+```javascript
 isValidIPAddress("192.168.1.1"); // returns true
 isValidIPAddress("256.1.2.3"); // returns false
 ```
@@ -76,7 +76,7 @@ isValidIPAddress("256.1.2.3"); // returns false
 
 Checks if the given string is a valid subnet mask.
 
-```typescript
+```javascript
 isValidSubnetMask("255.255.255.0"); // returns true
 isValidSubnetMask("255.255.256.0"); // returns false
 ```
@@ -85,7 +85,7 @@ isValidSubnetMask("255.255.256.0"); // returns false
 
 Checks if the given string is a valid CIDR notation.
 
-```typescript
+```javascript
 isValidCIDR("192.168.1.0/24"); // returns true
 isValidCIDR("192.168.1.0/33"); // returns false
 ```
@@ -96,7 +96,7 @@ isValidCIDR("192.168.1.0/33"); // returns false
 
 Converts an IPv4 address to its binary representation.
 
-```typescript
+```javascript
 ipToBinary("192.168.1.1"); // returns '11000000.10101000.00000001.00000001'
 ```
 
@@ -104,7 +104,7 @@ ipToBinary("192.168.1.1"); // returns '11000000.10101000.00000001.00000001'
 
 Converts a binary representation of an IP address to its decimal format.
 
-```typescript
+```javascript
 binaryToIP("11000000.10101000.00000001.00000001"); // returns '192.168.1.1'
 ```
 
@@ -112,7 +112,7 @@ binaryToIP("11000000.10101000.00000001.00000001"); // returns '192.168.1.1'
 
 Converts an IPv4 address to its integer representation.
 
-```typescript
+```javascript
 ipToInteger("192.168.1.1"); // returns 3232235777
 ```
 
@@ -120,7 +120,7 @@ ipToInteger("192.168.1.1"); // returns 3232235777
 
 Converts an integer representation of an IP address to its decimal format.
 
-```typescript
+```javascript
 integerToIP(3232235777); // returns '192.168.1.1'
 ```
 
@@ -130,7 +130,7 @@ integerToIP(3232235777); // returns '192.168.1.1'
 
 Calculates the network address based on an IP address and subnet mask.
 
-```typescript
+```javascript
 calculateNetworkAddress("192.168.1.100", "255.255.255.0"); // returns '192.168.1.0'
 ```
 
@@ -138,7 +138,7 @@ calculateNetworkAddress("192.168.1.100", "255.255.255.0"); // returns '192.168.1
 
 Calculates the broadcast address based on an IP address and subnet mask.
 
-```typescript
+```javascript
 calculateBroadcastAddress("192.168.1.100", "255.255.255.0"); // returns '192.168.1.255'
 ```
 
@@ -146,7 +146,7 @@ calculateBroadcastAddress("192.168.1.100", "255.255.255.0"); // returns '192.168
 
 Retrieves comprehensive information about a subnet.
 
-```typescript
+```javascript
 getSubnetInfo("192.168.1.100", "255.255.255.0");
 // returns {
 //   networkAddress: '192.168.1.0',
@@ -164,7 +164,7 @@ getSubnetInfo("192.168.1.100", "255.255.255.0");
 
 Returns the next IP address in sequential order.
 
-```typescript
+```javascript
 getNextIPAddress("192.168.1.1"); // returns '192.168.1.2'
 ```
 
@@ -172,7 +172,7 @@ getNextIPAddress("192.168.1.1"); // returns '192.168.1.2'
 
 Returns the previous IP address in sequential order.
 
-```typescript
+```javascript
 getPreviousIPAddress("192.168.1.2"); // returns '192.168.1.1'
 ```
 
@@ -180,7 +180,7 @@ getPreviousIPAddress("192.168.1.2"); // returns '192.168.1.1'
 
 Checks if an IP address belongs to a given subnet.
 
-```typescript
+```javascript
 isIPAddressInSubnet("192.168.1.100", "192.168.1.0", "255.255.255.0"); // returns true
 ```
 
@@ -188,7 +188,7 @@ isIPAddressInSubnet("192.168.1.100", "192.168.1.0", "255.255.255.0"); // returns
 
 Checks if an IP address is a public IP address.
 
-```typescript
+```javascript
 isPublicIP("8.8.8.8"); // returns true
 isPublicIP("192.168.1.1"); // returns false
 ```
@@ -197,7 +197,7 @@ isPublicIP("192.168.1.1"); // returns false
 
 Checks if an IP address is a private IP address.
 
-```typescript
+```javascript
 isPrivateIP("192.168.1.1"); // returns true
 isPrivateIP("8.8.8.8"); // returns false
 ```
@@ -206,7 +206,7 @@ isPrivateIP("8.8.8.8"); // returns false
 
 Generates an array of IP addresses within the specified range.
 
-```typescript
+```javascript
 getIPRange("192.168.1.1", "192.168.1.3");
 // returns ['192.168.1.1', '192.168.1.2', '192.168.1.3']
 ```
@@ -215,7 +215,7 @@ getIPRange("192.168.1.1", "192.168.1.3");
 
 ip-navigator uses Jest for unit testing. To run the tests, use the following command:
 
-```shellscript
+```bash
 pnpm test # or npm test
 ```
 
