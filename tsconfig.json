@@ -11,6 +11,6 @@
     "strict": true,
     "esModuleInterop": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "lib"],
   "exclude": ["node_modules", "**/__tests__/*"]
 }

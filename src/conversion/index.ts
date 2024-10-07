@@ -1,190 +1,217 @@
-import { isValidIPAddress } from "../validation/index";
+import {
+  convertBinaryOctetToDecimal,
+  convertDecimalOctetToBinary,
+} from "../../lib/conversion";
+
+import { isValidPrefix } from "../../lib/validation";
+
+import {
+  isValidIPAddress,
+  isValidSubnetMask,
+  isValidBinaryIP,
+} from "../validation/index";
 
 /**
  * Converts an IPv4 address to its binary representation.
  *
  * This function takes a string representation of an IPv4 address and converts it
- * to its binary equivalent, where each octet is represented by 8 bits.
+ * to its binary equivalent. Each octet is converted to an 8-bit binary string,
+ * and the resulting octets are joined with dots.
  *
  * @param {string} ipAddress - The IPv4 address to convert.
  * @returns {string} The binary representation of the IP address, with dots separating each octet.
+ * @throws {Error} If the input is not a valid IPv4 address.
  *
  * @example
  * ipToBinary('192.168.1.1');  // returns '11000000.10101000.00000001.00000001'
  * ipToBinary('10.0.0.1');     // returns '00001010.00000000.00000000.00000001'
  *
- * @remarks
- * - The function assumes that the input is a valid IPv4 address.
- * - Each octet in the output is padded to 8 bits.
- * - The octets in the output are separated by dots for readability.
- *
  * @status DONE
  *
  */
 export const ipToBinary = (ipAddress: string): string => {
-  // Check if the IP address is valid
   if (!isValidIPAddress(ipAddress)) {
     throw new Error("Invalid IP address");
   }
 
-  // Split the IP address into octets
   const octets = ipAddress.split(".");
 
-  // Convert each octet to binary and pad to 8 bits
-  const binaryOctets = octets.map((octet) => {
-    return Number.parseInt(octet, 10).toString(2).padStart(8, "0");
-  });
+  const binaryOctets = octets.map((octet) =>
+    convertDecimalOctetToBinary(octet)
+  );
 
-  // Join the binary octets with dots
   return binaryOctets.join(".");
 };
 
 /**
  * Converts a binary representation of an IPv4 address to its decimal notation.
  *
- * This function takes a string of binary octets (separated by dots) and converts it
- * to the standard decimal notation of an IPv4 address.
+ * This function takes a string of binary octets (separated by dots) and converts
+ * it back to a standard IPv4 address in decimal notation. It validates the input
+ * to ensure it's a properly formatted binary IP address.
  *
- * @param {string} binaryIP - The binary representation of the IP address.
+ * @param {string} binaryIP - The binary representation of the IP address, with dots separating each octet.
  * @returns {string} The IPv4 address in decimal notation.
+ * @throws {Error} If the input is not a valid binary representation of an IPv4 address.
  *
  * @example
  * binaryToIP('11000000.10101000.00000001.00000001');  // returns '192.168.1.1'
  * binaryToIP('00001010.00000000.00000000.00000001');  // returns '10.0.0.1'
  *
- * @remarks
- * - The function assumes that the input is a valid binary representation of an IPv4 address.
- * - Each octet in the input should be 8 bits long.
- * - The function expects the octets to be separated by dots.
- *
  * @status DONE
  *
  */
 export const binaryToIP = (binaryIP: string): string => {
-  // Check if the binary IP has the correct length
-  if (binaryIP.length !== 35) {
+  if (!isValidBinaryIP(binaryIP)) {
     throw new Error("Invalid binary IP address");
   }
 
-  // Check if the binary IP contains only 0s, 1s, and dots
-  Array.from(binaryIP).forEach((char) => {
-    if (char !== "0" && char !== "1" && char !== ".") {
-      throw new Error("Invalid binary IP address");
-    }
-  });
-
-  if (binaryIP.split(".").length !== 4) {
-    throw new Error("Invalid binary IP address");
-  }
-
-  // Split the binary IP into octets
   const binaryOctets = binaryIP.split(".");
 
-  const decimalOctets = binaryOctets.map((binaryOctet) => {
-    if (binaryOctet.length !== 8) {
-      throw new Error("Invalid binary IP address");
-    }
-
-    return parseInt(binaryOctet, 2).toString();
-  });
+  const decimalOctets = binaryOctets.map((binaryOctet) =>
+    convertBinaryOctetToDecimal(binaryOctet)
+  );
 
   return decimalOctets.join(".");
 };
 
 /**
- * Converts an IPv4 address to its integer representation.
+ * Converts an IPv4 address to its 32-bit integer representation.
  *
  * This function takes a string representation of an IPv4 address and converts it
- * to its 32-bit integer equivalent.
+ * to its equivalent 32-bit integer value. It uses bitwise operations to combine
+ * the octets into a single integer.
  *
  * @param {string} ipAddress - The IPv4 address to convert.
- * @returns {number} The integer representation of the IP address.
+ * @returns {number} The 32-bit integer representation of the IP address.
+ * @throws {Error} If the input is not a valid IPv4 address.
  *
  * @example
  * ipToInteger('192.168.1.1');  // returns 3232235777
  * ipToInteger('10.0.0.1');     // returns 167772161
  *
- * @remarks
- * - The function assumes that the input is a valid IPv4 address.
- * - The returned integer is a 32-bit unsigned integer.
- * - The conversion treats the IP address as big-endian.
- *
- * @status TODO
+ * @status DONE
  *
  */
-export function ipToInteger(ipAddress: string): number {
-  // Implementation here
-  return 3232235777; // 192.168.1.1 in integer form
-}
+export const ipToInteger = (ipAddress: string): number => {
+  if (!isValidIPAddress(ipAddress)) {
+    throw new Error("Invalid IP address");
+  }
+
+  const octets = ipAddress.split(".");
+
+  return octets.reduce((acc, octet, index) => {
+    return acc + Number.parseInt(octet, 10) * Math.pow(256, 3 - index);
+  }, 0);
+};
 
 /**
  * Converts a 32-bit integer to its IPv4 address representation.
  *
- * This function takes a 32-bit integer and converts it to the standard
- * decimal notation of an IPv4 address.
+ * This function takes a 32-bit integer and converts it back to a standard IPv4
+ * address in decimal notation. It uses bitwise operations to extract each octet
+ * from the integer.
  *
- * @param {number} integer - The integer to convert.
+ * @param {number} integer - The 32-bit integer to convert.
  * @returns {string} The IPv4 address in decimal notation.
+ * @throws {Error} If the input is not a valid 32-bit unsigned integer.
  *
  * @example
  * integerToIP(3232235777);  // returns '192.168.1.1'
  * integerToIP(167772161);   // returns '10.0.0.1'
  *
- * @remarks
- * - The function assumes that the input is a valid 32-bit unsigned integer.
- * - The conversion treats the integer as big-endian.
- *
- * @status TODO
+ * @status DONE
  *
  */
-export function integerToIP(integer: number): string {
-  // Implementation here
-  return "192.168.1.1";
-}
+export const integerToIP = (integer: number): string => {
+  if (
+    !Number.isInteger(integer) ||
+    integer < 0 ||
+    integer > Math.pow(2, 32) - 1
+  ) {
+    throw new Error("Input must be an integer between 0 and 4294967295");
+  }
+
+  const base = 256;
+
+  let exponent = 3;
+  let temp = integer;
+  let octects = [];
+
+  while (exponent >= 0) {
+    // Calculate the octet value
+    const octet = Math.floor(temp / Math.pow(base, exponent));
+
+    // Add the octet to the list
+    octects.push(octet);
+
+    // Update the remaining value
+    temp = temp - octet * Math.pow(256, exponent);
+
+    // Move to the next octet
+    exponent--;
+  }
+
+  return octects.join(".");
+};
 
 /**
- * Converts an IPv4 address to its IPv4-mapped IPv6 address.
+ * Calculates the subnet mask from the given CIDR notation.
  *
- * This function takes a string representation of an IPv4 address and returns
- * its IPv4-mapped IPv6 address equivalent.
+ * This function takes a CIDR prefix length and generates the corresponding
+ * subnet mask in IPv4 format. It creates a binary string of 1s followed by 0s,
+ * then converts each 8-bit segment to its decimal equivalent.
  *
- * @param {string} ipv4Address - The IPv4 address to convert.
- * @returns {string} The IPv4-mapped IPv6 address.
+ * @param {number} prefix - The CIDR notation (0-32).
+ * @returns {string} The subnet mask in IPv4 format.
+ * @throws {Error} If the CIDR is not a valid number between 0 and 32.
  *
  * @example
- * ipv4ToIpv6('192.168.1.1');  // returns '::ffff:192.168.1.1'
- * ipv4ToIpv6('10.0.0.1');     // returns '::ffff:10.0.0.1'
+ * cidrToSubnetMask(24);  // returns '255.255.255.0'
+ * cidrToSubnetMask(16);  // returns '255.255.0.0'
  *
- * @remarks
- * - The function assumes that the input is a valid IPv4 address.
- * - The returned address is in the format '::ffff:' followed by the IPv4 address.
- * - This format is used to represent IPv4 addresses in IPv6 networks.
+ * @status DONE
  */
-export function ipv4ToIpv6(ipv4Address: string): string {
-  // Implementation here
-  return "::ffff:192.168.1.1";
-}
+export const cidrToSubnetMask = (prefix: number): string => {
+  if (!isValidPrefix(prefix.toString())) {
+    throw new Error("CIDR must be an integer between 0 and 32");
+  }
+
+  const binaryMask = "1".repeat(prefix).padEnd(32, "0");
+
+  return [
+    binaryMask.slice(0, 8),
+    binaryMask.slice(8, 16),
+    binaryMask.slice(16, 24),
+    binaryMask.slice(24),
+  ]
+    .map((octet) => parseInt(octet, 2))
+    .join(".");
+};
 
 /**
- * Converts an IPv4-mapped IPv6 address to its IPv4 equivalent.
+ * Calculates the CIDR notation from the given subnet mask.
  *
- * This function takes a string representation of an IPv4-mapped IPv6 address
- * and returns its IPv4 equivalent. If the input is not an IPv4-mapped IPv6 address,
- * it returns null.
+ * This function takes a subnet mask in IPv4 format and determines the
+ * equivalent CIDR prefix length. It does this by converting the mask to
+ * binary and counting the number of consecutive 1s from the start.
  *
- * @param {string} ipv6Address - The IPv6 address to convert.
- * @returns {string | null} The IPv4 address if the input is an IPv4-mapped IPv6 address, null otherwise.
+ * @param {string} subnetMask - The subnet mask in IPv4 format.
+ * @returns {number} The CIDR notation (0-32).
+ * @throws {Error} If the subnet mask is not valid.
  *
  * @example
- * ipv6ToIpv4('::ffff:192.168.1.1');  // returns '192.168.1.1'
- * ipv6ToIpv4('2001:db8::1');         // returns null
+ * subnetMaskToCIDR('255.255.255.0');  // returns 24
+ * subnetMaskToCIDR('255.255.0.0');    // returns 16
  *
- * @remarks
- * - The function checks if the input is a valid IPv4-mapped IPv6 address.
- * - IPv4-mapped IPv6 addresses start with '::ffff:' followed by the IPv4 address.
- * - If the input is not an IPv4-mapped IPv6 address, the function returns null.
+ * @status DONE
  */
-export function ipv6ToIpv4(ipv6Address: string): string | null {
-  // Implementation here
-  return "192.168.1.1";
-}
+export const subnetMaskToCIDR = (subnetMask: string): number => {
+  if (!isValidIPAddress(subnetMask) || !isValidSubnetMask(subnetMask)) {
+    throw new Error("Invalid subnet mask");
+  }
+
+  const binaryIP = ipToBinary(subnetMask);
+
+  return binaryIP.length - binaryIP.replace(/1/g, "").length;
+};

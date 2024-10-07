@@ -1,23 +1,7 @@
-/**
- * Calculates the subnet mask based on the given prefix length.
- *
- * This function converts a CIDR prefix length to its corresponding subnet mask.
- *
- * @param {number} prefixLength - The prefix length (0-32).
- * @returns {string} The subnet mask in dotted decimal notation.
- *
- * @example
- * calculateSubnetMask(24);  // returns '255.255.255.0'
- * calculateSubnetMask(16);  // returns '255.255.0.0'
- *
- * @remarks
- * - The function assumes the input is a valid prefix length (0-32).
- * - For prefix length 0, it returns '0.0.0.0', and for 32, it returns '255.255.255.255'.
- */
-export function calculateSubnetMask(prefixLength: number): string {
-  // Implementation here
-  return "255.255.255.0";
-}
+import { subnetMaskToCIDR } from "../conversion";
+import { ipToInteger, integerToIP } from "../conversion";
+import { isValidIPAddress, isValidSubnetMask } from "../validation";
+import { ipToBinary, binaryToIP } from "../conversion";
 
 /**
  * Calculates the network address based on an IP address and subnet mask.
@@ -35,14 +19,32 @@ export function calculateSubnetMask(prefixLength: number): string {
  * @remarks
  * - The function assumes both inputs are valid IPv4 addresses in dotted decimal notation.
  * - It performs a bitwise AND operation between each octet of the IP and subnet mask.
+ *
+ * @status DONE
+ *
  */
-export function calculateNetworkAddress(
+export const calculateNetworkAddress = (
   ipAddress: string,
   subnetMask: string
-): string {
-  // Implementation here
-  return "192.168.1.0";
-}
+): string => {
+  if (!isValidIPAddress(ipAddress) || !isValidSubnetMask(subnetMask)) {
+    throw new Error("Invalid IP address or subnet mask");
+  }
+
+  const ipBinaryOctets = ipToBinary(ipAddress).split(".");
+  const maskBinaryOctets = ipToBinary(subnetMask).split(".");
+
+  const networkBinary = ipBinaryOctets
+    .map((octet, index) => {
+      const number_1 = parseInt(octet, 2);
+      const number_2 = parseInt(maskBinaryOctets[index], 2);
+
+      return (number_1 & number_2).toString(2).padStart(8, "0");
+    })
+    .join(".");
+
+  return binaryToIP(networkBinary);
+};
 
 /**
  * Calculates the broadcast address based on an IP address and subnet mask.
@@ -61,13 +63,29 @@ export function calculateNetworkAddress(
  * - The function assumes both inputs are valid IPv4 addresses in dotted decimal notation.
  * - It calculates the network address and then sets all host bits to 1.
  */
-export function calculateBroadcastAddress(
+export const calculateBroadcastAddress = (
   ipAddress: string,
   subnetMask: string
-): string {
-  // Implementation here
-  return "192.168.1.255";
-}
+): string => {
+  if (!isValidIPAddress(ipAddress) || !isValidSubnetMask(subnetMask)) {
+    throw new Error("Invalid IP address or subnet mask");
+  }
+
+  const networkAddress = calculateNetworkAddress(ipAddress, subnetMask);
+  const networkBinary = ipToBinary(networkAddress);
+  const maskBinary = ipToBinary(subnetMask);
+
+  const broadcastBinary = networkBinary
+    .split(".")
+    .map((octet, index) => {
+      const maskOctet = maskBinary.split(".")[index];
+      return parseInt(octet, 2) | (parseInt(maskOctet, 2) ^ 255);
+    })
+    .map((num) => num.toString(2).padStart(8, "0"))
+    .join(".");
+
+  return binaryToIP(broadcastBinary);
+};
 
 /**
  * Calculates the available IP addresses in a subnet.
@@ -88,55 +106,29 @@ export function calculateBroadcastAddress(
  * - It excludes the network address (first address) and broadcast address (last address) from the results.
  * - For very large subnets, be aware of potential memory usage when generating the full list.
  */
-export function calculateAvailableIPs(
+export const calculateAvailableIPs = (
   networkAddress: string,
   subnetMask: string
-): string[] {
-  // Implementation here
-  return ["192.168.1.1", "192.168.1.2", "192.168.1.3"];
-}
+): string[] => {
+  if (!isValidIPAddress(networkAddress) || !isValidSubnetMask(subnetMask)) {
+    throw new Error("Invalid network address or subnet mask");
+  }
 
-/**
- * Converts CIDR notation to a subnet mask.
- *
- * This function takes a CIDR prefix length and returns the corresponding subnet mask.
- *
- * @param {number} cidr - The CIDR prefix length (0-32).
- * @returns {string} The subnet mask in dotted decimal notation.
- *
- * @example
- * cidrToSubnetMask(24);  // returns '255.255.255.0'
- * cidrToSubnetMask(16);  // returns '255.255.0.0'
- *
- * @remarks
- * - The function assumes the input is a valid CIDR prefix length (0-32).
- * - This function is similar to calculateSubnetMask but specifically for CIDR notation.
- */
-export function cidrToSubnetMask(cidr: number): string {
-  // Implementation here
-  return "255.255.255.0";
-}
+  const broadcastAddress = calculateBroadcastAddress(
+    networkAddress,
+    subnetMask
+  );
 
-/**
- * Converts a subnet mask to CIDR notation.
- *
- * This function takes a subnet mask and returns the corresponding CIDR prefix length.
- *
- * @param {string} subnetMask - The subnet mask in dotted decimal notation.
- * @returns {number} The CIDR prefix length.
- *
- * @example
- * subnetMaskToCIDR('255.255.255.0');  // returns 24
- * subnetMaskToCIDR('255.255.0.0');    // returns 16
- *
- * @remarks
- * - The function assumes the input is a valid subnet mask.
- * - It counts the number of contiguous 1 bits from left to right in the binary representation of the mask.
- */
-export function subnetMaskToCIDR(subnetMask: string): number {
-  // Implementation here
-  return 24;
-}
+  const startIP = ipToInteger(networkAddress) + 1;
+  const endIP = ipToInteger(broadcastAddress) - 1;
+
+  const availableIPs = [];
+  for (let i = startIP; i <= endIP; i++) {
+    availableIPs.push(integerToIP(i));
+  }
+
+  return availableIPs;
+};
 
 /**
  * Retrieves comprehensive information about a subnet.
@@ -169,7 +161,7 @@ export function subnetMaskToCIDR(subnetMask: string): number {
  * - Total hosts include the network and broadcast addresses, while usable hosts exclude these.
  * - For subnets smaller than /31, firstUsableHost and lastUsableHost will be the same as networkAddress and broadcastAddress.
  */
-export function getSubnetInfo(
+export const getSubnetInfo = (
   ipAddress: string,
   subnetMask: string
 ): {
@@ -179,14 +171,32 @@ export function getSubnetInfo(
   usableHosts: number;
   firstUsableHost: string;
   lastUsableHost: string;
-} {
-  // Implementation here
+} => {
+  if (!isValidIPAddress(ipAddress) || !isValidSubnetMask(subnetMask)) {
+    throw new Error("Invalid IP address or subnet mask");
+  }
+
+  const networkAddress = calculateNetworkAddress(ipAddress, subnetMask);
+  const broadcastAddress = calculateBroadcastAddress(ipAddress, subnetMask);
+  const cidr = subnetMaskToCIDR(subnetMask);
+
+  const totalHosts = Math.pow(2, 32 - cidr);
+  const usableHosts = cidr === 31 ? 2 : totalHosts > 2 ? totalHosts - 2 : 0;
+
+  const availableIPs = calculateAvailableIPs(networkAddress, subnetMask);
+  const firstUsableHost =
+    availableIPs.length > 0 ? availableIPs[0] : networkAddress;
+  const lastUsableHost =
+    availableIPs.length > 0
+      ? availableIPs[availableIPs.length - 1]
+      : broadcastAddress;
+
   return {
-    networkAddress: "192.168.1.0",
-    broadcastAddress: "192.168.1.255",
-    totalHosts: 256,
-    usableHosts: 254,
-    firstUsableHost: "192.168.1.1",
-    lastUsableHost: "192.168.1.254",
+    networkAddress,
+    broadcastAddress,
+    totalHosts,
+    usableHosts,
+    firstUsableHost,
+    lastUsableHost,
   };
-}
+};

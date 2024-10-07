@@ -1,3 +1,6 @@
+import { isValidIPAddress } from "../validation";
+import { ipToInteger, integerToIP } from "../conversion";
+
 /**
  * Returns the next IP address in sequential order.
  *
@@ -16,10 +19,21 @@
  * - The function assumes that the input is a valid IPv4 address.
  * - It correctly handles rollovers, including from 255 to 0 in any octet.
  */
-export function getNextIPAddress(ipAddress: string): string {
-  // Implementation here
-  return "192.168.1.2";
-}
+export const getNextIPAddress = (ipAddress: string): string => {
+  if (!isValidIPAddress(ipAddress)) {
+    throw new Error("Invalid IP address");
+  }
+
+  const intIP = ipToInteger(ipAddress);
+
+  if (intIP === 4294967295) {
+    return "0.0.0.0";
+  }
+
+  const nextIntIP = intIP + 1;
+
+  return integerToIP(nextIntIP);
+};
 
 /**
  * Returns the previous IP address in sequential order.
@@ -39,10 +53,21 @@ export function getNextIPAddress(ipAddress: string): string {
  * - The function assumes that the input is a valid IPv4 address.
  * - It correctly handles rollovers, including from 0 to 255 in any octet.
  */
-export function getPreviousIPAddress(ipAddress: string): string {
-  // Implementation here
-  return "192.168.1.0";
-}
+export const getPreviousIPAddress = (ipAddress: string): string => {
+  if (!isValidIPAddress(ipAddress)) {
+    throw new Error("Invalid IP address");
+  }
+
+  const intIP = ipToInteger(ipAddress);
+
+  if (intIP === 0) {
+    return "255.255.255.255";
+  }
+
+  const prevIntIP = intIP - 1;
+
+  return integerToIP(prevIntIP);
+};
 
 /**
  * Checks if an IP address is within a given subnet.
@@ -63,14 +88,25 @@ export function getPreviousIPAddress(ipAddress: string): string {
  * - The function assumes all inputs are valid IPv4 addresses or subnet masks.
  * - It performs a bitwise AND operation between the IP and the subnet mask to determine if it's in the subnet.
  */
-export function isIPAddressInSubnet(
+export const isIPAddressInSubnet = (
   ipAddress: string,
   networkAddress: string,
   subnetMask: string
-): boolean {
-  // Implementation here
-  return true;
-}
+): boolean => {
+  if (
+    !isValidIPAddress(ipAddress) ||
+    !isValidIPAddress(networkAddress) ||
+    !isValidIPAddress(subnetMask)
+  ) {
+    throw new Error("Invalid IP address or subnet mask");
+  }
+
+  const ip = ipToInteger(ipAddress);
+  const network = ipToInteger(networkAddress);
+  const mask = ipToInteger(subnetMask);
+
+  return (ip & mask) === (network & mask);
+};
 
 /**
  * Checks if an IP address is a public IP address.
@@ -89,10 +125,46 @@ export function isIPAddressInSubnet(
  * - The function assumes the input is a valid IPv4 address.
  * - It checks against known ranges of private, loopback, and special-use IP addresses.
  */
-export function isPublicIP(ipAddress: string): boolean {
-  // Implementation here
-  return false;
-}
+export const isPublicIP = (ipAddress: string): boolean => {
+  if (!isValidIPAddress(ipAddress)) {
+    throw new Error("Invalid IP address");
+  }
+
+  const ip = ipToInteger(ipAddress);
+
+  // Check against private IP ranges
+  if (
+    (ip >= ipToInteger("10.0.0.0") && ip <= ipToInteger("10.255.255.255")) ||
+    (ip >= ipToInteger("172.16.0.0") && ip <= ipToInteger("172.31.255.255")) ||
+    (ip >= ipToInteger("192.168.0.0") && ip <= ipToInteger("192.168.255.255"))
+  ) {
+    return false;
+  }
+
+  // Check against loopback IP range
+  if (ip >= ipToInteger("127.0.0.0") && ip <= ipToInteger("127.255.255.255")) {
+    return false;
+  }
+
+  // Check against link-local IP range
+  if (
+    ip >= ipToInteger("169.254.0.0") &&
+    ip <= ipToInteger("169.254.255.255")
+  ) {
+    return false;
+  }
+
+  // Check other special-use IP ranges
+  if (ip >= ipToInteger("224.0.0.0") && ip <= ipToInteger("239.255.255.255")) {
+    return false; // Multicast
+  }
+
+  if (ip >= ipToInteger("240.0.0.0") && ip <= ipToInteger("255.255.255.255")) {
+    return false; // Reserved
+  }
+
+  return true;
+};
 
 /**
  * Checks if an IP address is a private IP address.
@@ -111,10 +183,19 @@ export function isPublicIP(ipAddress: string): boolean {
  * - The function assumes the input is a valid IPv4 address.
  * - It checks against known ranges of private IP addresses (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16).
  */
-export function isPrivateIP(ipAddress: string): boolean {
-  // Implementation here
-  return true;
-}
+export const isPrivateIP = (ipAddress: string): boolean => {
+  if (!isValidIPAddress(ipAddress)) {
+    throw new Error("Invalid IP address");
+  }
+
+  const ip = ipToInteger(ipAddress);
+
+  return (
+    (ip >= ipToInteger("10.0.0.0") && ip <= ipToInteger("10.255.255.255")) ||
+    (ip >= ipToInteger("172.16.0.0") && ip <= ipToInteger("172.31.255.255")) ||
+    (ip >= ipToInteger("192.168.0.0") && ip <= ipToInteger("192.168.255.255"))
+  );
+};
 
 /**
  * Generates an array of IP addresses within a specified range.
@@ -135,10 +216,25 @@ export function isPrivateIP(ipAddress: string): boolean {
  * - The start IP should be less than or equal to the end IP.
  * - For large ranges, be aware of potential memory usage.
  */
-export function getIPRange(startIP: string, endIP: string): string[] {
-  // Implementation here
-  return ["192.168.1.1", "192.168.1.2", "192.168.1.3"];
-}
+export const getIPRange = (startIP: string, endIP: string): string[] => {
+  if (!isValidIPAddress(startIP) || !isValidIPAddress(endIP)) {
+    throw new Error("Invalid IP address");
+  }
+
+  const start = ipToInteger(startIP);
+  const end = ipToInteger(endIP);
+
+  if (start > end) {
+    throw new Error("Start IP must be less than or equal to end IP");
+  }
+
+  const range: string[] = [];
+  for (let i = start; i <= end; i++) {
+    range.push(integerToIP(i));
+  }
+
+  return range;
+};
 
 /**
  * Compares two IP addresses.
@@ -161,32 +257,15 @@ export function getIPRange(startIP: string, endIP: string): string[] {
  * - The function assumes both inputs are valid IPv4 addresses.
  * - It compares the IP addresses numerically, not lexicographically.
  */
-export function compareIPAddresses(ip1: string, ip2: string): -1 | 0 | 1 {
-  // Implementation here
-  return 0;
-}
+export const compareIPAddresses = (ip1: string, ip2: string): -1 | 0 | 1 => {
+  if (!isValidIPAddress(ip1) || !isValidIPAddress(ip2)) {
+    throw new Error("Invalid IP address");
+  }
 
-/**
- * Determines the type of a given IP address.
- *
- * This function takes an IP address as a string and returns whether it's
- * an IPv4 address, an IPv6 address, or an invalid IP address.
- *
- * @param {string} ipAddress - The IP address to check.
- * @returns {"IPv4" | "IPv6" | "Invalid"} The type of the IP address.
- *
- * @example
- * getIPAddressType('192.168.1.1');                             // returns "IPv4"
- * getIPAddressType('2001:0db8:85a3:0000:0000:8a2e:0370:7334'); // returns "IPv6"
- * getIPAddressType('256.0.0.1');                               // returns "Invalid"
- *
- * @remarks
- * - The function checks the format of the IP address to determine its type.
- * - It does not perform exhaustive validation of the IP address.
- */
-export function getIPAddressType(
-  ipAddress: string
-): "IPv4" | "IPv6" | "Invalid" {
-  // Implementation here
-  return "IPv4";
-}
+  const int1 = ipToInteger(ip1);
+  const int2 = ipToInteger(ip2);
+
+  if (int1 < int2) return -1;
+  if (int1 > int2) return 1;
+  return 0;
+};

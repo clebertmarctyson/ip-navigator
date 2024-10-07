@@ -1,6 +1,9 @@
+Here's the updated README.md for the ip-navigator project:
+
+````markdown
 # ip-navigator
 
-A comprehensive TypeScript/JavaScript package for IP address manipulation and subnet calculations.
+A comprehensive TypeScript package for IP address manipulation and subnet calculations.
 
 ## Table of Contents
 
@@ -8,34 +11,32 @@ A comprehensive TypeScript/JavaScript package for IP address manipulation and su
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
-  - [TypeScript](#typescript)
-  - [JavaScript](#javascript)
 - [API Reference](#api-reference)
   - [Validation Functions](#validation-functions)
   - [Conversion Functions](#conversion-functions)
   - [Subnet Operations](#subnet-operations)
   - [IP Address Operations](#ip-address-operations)
+- [Testing](#testing)
 - [Contributing](#contributing)
 - [License](#license)
 - [Bugs and Issues](#bugs-and-issues)
 
 ## Description
 
-ip-navigator is a powerful and user-friendly package designed to simplify IP address management and subnet calculations. It's written in TypeScript and can be used in both TypeScript and JavaScript projects. Whether you're a network administrator, developer, or student learning about networking, this tool provides an intuitive set of functions for handling various IP address operations.
+ip-navigator is a powerful and user-friendly TypeScript package designed to simplify IP address management and subnet calculations. Whether you're a network administrator, developer, or student learning about networking, this tool provides an intuitive set of functions for handling various IP address operations.
 
 ## Features
 
-- Validate IPv4 addresses
-- Convert between decimal and binary IP formats
+- Validate IPv4 addresses and subnet masks
+- Convert between decimal, binary, and integer IP formats
 - Perform subnet calculations (network address, broadcast address, available hosts)
 - Manipulate and compare IP addresses
 - Work with CIDR notation
-- Classify IP addresses (public, private, loopback, etc.)
+- Classify IP addresses (public, private)
 - Generate IP address ranges
-- Perform bitwise operations on IP addresses
 - Check if IP addresses belong to specific subnets
-- Convert between IP address and integer representations
 - Full TypeScript support with type definitions
+- Comprehensive test suite using Jest
 
 ## Installation
 
@@ -44,38 +45,23 @@ To install ip-navigator, run the following command in your terminal:
 ```bash
 npm install ip-navigator
 ```
+````
 
 Or if you're using pnpm:
 
-```bash
+```shellscript
 pnpm add ip-navigator
 ```
 
 ## Usage
 
-ip-navigator can be used in both TypeScript and JavaScript projects.
-
-### TypeScript
+ip-navigator is designed for use in TypeScript projects. Here's a basic example of how to use it:
 
 ```typescript
-import ipNavigator from "ip-navigator";
-// Or import specific functions
 import { isValidIPAddress, ipToBinary } from "ip-navigator";
 
 // Example usage
-console.log(ipNavigator.isValidIPAddress("192.168.1.1")); // true
-console.log(ipToBinary("192.168.1.1")); // '11000000.10101000.00000001.00000001'
-```
-
-### JavaScript
-
-```javascript
-const ipNavigator = require("ip-navigator");
-// Or require specific functions
-const { isValidIPAddress, ipToBinary } = require("ip-navigator");
-
-// Example usage
-console.log(ipNavigator.isValidIPAddress("192.168.1.1")); // true
+console.log(isValidIPAddress("192.168.1.1")); // true
 console.log(ipToBinary("192.168.1.1")); // '11000000.10101000.00000001.00000001'
 ```
 
@@ -145,14 +131,6 @@ integerToIP(3232235777); // returns '192.168.1.1'
 ```
 
 ### Subnet Operations
-
-#### calculateSubnetMask(prefixLength: number): string
-
-Calculates the subnet mask based on the given prefix length.
-
-```typescript
-calculateSubnetMask(24); // returns '255.255.255.0'
-```
 
 #### calculateNetworkAddress(ipAddress: string, subnetMask: string): string
 
@@ -239,6 +217,16 @@ getIPRange("192.168.1.1", "192.168.1.3");
 // returns ['192.168.1.1', '192.168.1.2', '192.168.1.3']
 ```
 
+## Testing
+
+ip-navigator uses Jest for unit testing. To run the tests, use the following command:
+
+```shellscript
+pnpm test # or npm test
+```
+
+Our test suite covers all functions in the package, ensuring reliability and correctness. We strive for high test coverage and encourage contributors to write tests for any new features or bug fixes.
+
 ## Contributing
 
 We welcome contributions from the community! If you'd like to contribute to ip-navigator, please follow these steps:
@@ -246,8 +234,9 @@ We welcome contributions from the community! If you'd like to contribute to ip-n
 1. Fork the repository
 2. Create a new branch for your feature or bug fix
 3. Make your changes and write tests if applicable
-4. Commit your changes and push to your fork
-5. Create a pull request with a clear description of your changes
+4. Ensure all tests pass by running `pnpm test # or npm test`
+5. Commit your changes and push to your fork
+6. Create a pull request with a clear description of your changes
 
 Please ensure that your code adheres to the existing style and that all tests pass before submitting a pull request.
 

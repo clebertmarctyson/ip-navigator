@@ -18,7 +18,15 @@
     "dev": "tsx --watch src/index.ts",
     "test": "jest --watch"
   },
-  "keywords": [],
+  "keywords": [
+    "ip",
+    "navigator",
+    "ip-navigator",
+    "ip-address",
+    "ip-address-navigator",
+    "networking",
+    "networking-tools"
+  ],
   "author": "Marc Tyson CLEBERT <marctysonclebert9@gmail.com>",
   "license": "MIT",
   "devDependencies": {

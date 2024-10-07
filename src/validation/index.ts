@@ -1,14 +1,16 @@
+import {
+  isValidBinaryOctet,
+  isValidDecimalOctet,
+  isValidPrefix,
+} from "../../lib/validation";
+
 import { ipToBinary } from "../conversion/index";
 
 /**
  * Validates whether the given string is a valid IPv4 address.
  *
- * This function checks if the input string conforms to the format of a valid IPv4 address.
- * A valid IPv4 address consists of four octets, each ranging from 0 to 255, separated by dots.
- * Any leading or trailing whitespace will result in the IP address being considered invalid.
- *
  * @param {string} ipAddress - The IP address to validate.
- * @returns {boolean} Returns true if the IP address is valid, false otherwise.
+ * @returns {boolean} True if the IP address is valid, false otherwise.
  *
  * @example
  * isValidIPAddress('192.168.1.1');   // returns true
@@ -18,48 +20,22 @@ import { ipToBinary } from "../conversion/index";
  * isValidIPAddress(' 192.168.1.1');  // returns false
  * isValidIPAddress('192.168.1.1 ');  // returns false
  *
- * @remarks
- * - The function checks for any leading or trailing whitespace and considers it invalid.
- * - It then splits the input string by dots and checks if there are exactly 4 parts.
- * - It then validates each octet to ensure it's a number between 0 and 255.
- * - The function also checks for leading zeros, which are not allowed in standard IPv4 notation.
- *
  * @status DONE
  *
  */
 export const isValidIPAddress = (ipAddress: string): boolean => {
+  // Check for leading or trailing whitespace
+  if (ipAddress !== ipAddress.trim()) return false;
+
   // Split the IP address into octets
   const octets = ipAddress.split(".");
 
   // Check if we have exactly 4 octets
-  if (octets.length !== 4) {
-    return false;
-  }
+  if (octets.length !== 4) return false;
 
   // Validate each octet
   for (const octet of octets) {
-    // Check for empty octet
-    if (octet.length === 0) {
-      return false;
-    }
-
-    // Check for leading zeros (not allowed in standard IPv4 notation)
-    if (octet.length > 1 && octet[0] === "0") {
-      return false;
-    }
-
-    // Check if octect has leading or trailing whitespace
-    if (octet.trim() !== octet) {
-      return false;
-    }
-
-    // Parse the octet to a number
-    const num = Number.parseInt(octet, 10);
-
-    // Check if it's a valid number between 0 and 255
-    if (Number.isNaN(num) || num < 0 || num > 255) {
-      return false;
-    }
+    if (!isValidDecimalOctet(octet)) return false;
   }
 
   // If we've passed all checks, the IP is valid
@@ -69,12 +45,8 @@ export const isValidIPAddress = (ipAddress: string): boolean => {
 /**
  * Validates whether the given string is a valid subnet mask.
  *
- * This function checks if the input string conforms to the format of a valid subnet mask.
- * A valid subnet mask is a sequence of four octets, where each octet is a number between 0 and 255,
- * and the binary representation of the entire mask is a continuous sequence of 1s followed by 0s.
- *
  * @param {string} subnetMask - The subnet mask to validate.
- * @returns {boolean} Returns true if the subnet mask is valid, false otherwise.
+ * @returns {boolean} True if the subnet mask is valid, false otherwise.
  *
  * @example
  * isValidSubnetMask('255.255.255.0');   // returns true
@@ -82,60 +54,98 @@ export const isValidIPAddress = (ipAddress: string): boolean => {
  * isValidSubnetMask('255.255.254.0');   // returns true
  * isValidSubnetMask('255.255.253.0');   // returns false
  *
- * @remarks
- * - The function checks if the input is a string of four dot-separated numbers.
- * - Each number must be between 0 and 255.
- * - The binary representation of the entire mask must be a continuous sequence of 1s followed by 0s.
- * - Common valid subnet masks include 255.0.0.0, 255.255.0.0, 255.255.255.0, etc.
- *
  * @status DONE
  *
  */
 export const isValidSubnetMask = (subnetMask: string): boolean => {
+  // Check if the subnet mask is a valid IP address
   if (!isValidIPAddress(subnetMask)) return false;
 
+  // Convert the subnet mask to binary
   const binaryIP = ipToBinary(subnetMask);
 
+  // Find the first zero in the binary representation
   const zeroIndex = binaryIP.indexOf("0");
 
-  return zeroIndex === -1 || !binaryIP.slice(zeroIndex).includes("1");
+  // Check if there are no zeros in the subnet mask
+  const noZero = zeroIndex === -1;
+
+  // Check if there are no ones after the first zero
+  const noOneAfterZero = !binaryIP.slice(zeroIndex).includes("1");
+
+  // If both conditions are met, the subnet mask is valid
+  return noZero || noOneAfterZero;
 };
 
 /**
  * Validates whether the given string is a valid CIDR notation.
  *
- * This function checks if the input string conforms to the Classless Inter-Domain Routing (CIDR) notation.
- * A valid CIDR notation consists of an IP address followed by a forward slash and a prefix length.
- *
  * @param {string} cidr - The CIDR notation to validate.
- * @returns {boolean} Returns true if the CIDR notation is valid, false otherwise.
+ * @returns {boolean} True if the CIDR notation is valid, false otherwise.
  *
  * @example
  * isValidCIDR('192.168.1.0/24');   // returns true
  * isValidCIDR('192.168.1.0/33');   // returns false
  * isValidCIDR('192.168.1.0');      // returns false (missing prefix)
- *
- * @remarks
- * - The function checks if the input is a valid IP address followed by a '/' and a number.
- * - The prefix length should be between 0 and 32.
+ * isValidCIDR('192.168.1.1/24/32'); // returns false (multiple slashes)
+ * isValidCIDR('192.168.1.1/24.5'); // returns false (decimal prefix)
+ * isValidCIDR('192.168.1.1/');     // returns false (empty prefix)
  *
  * @status DONE
  *
  */
 export const isValidCIDR = (cidr: string): boolean => {
-  if (!cidr.includes("/") || cidr.trim() !== cidr) return false;
+  // Check for leading or trailing whitespace
+  if (cidr.trim() !== cidr) return false;
 
-  const values = cidr.split("/");
+  // Split the CIDR notation into IP address and prefix
+  const parts = cidr.split("/");
 
-  if (values.length !== 2) return false;
+  // Check if we have exactly 2 parts
+  if (parts.length !== 2) return false;
 
-  const [ipAddress, prefix] = values;
+  // Destructure the parts into IP address and prefix
+  const [ipAddress, prefix] = parts;
 
-  if (!Number.isInteger(Number(prefix)) || !isValidIPAddress(ipAddress)) {
-    return false;
-  }
+  // Check if the IP address is valid
+  if (!isValidIPAddress(ipAddress)) return false;
 
-  const num = Number.parseInt(prefix, 10);
+  // Check if the prefix is a valid
+  if (!isValidPrefix(prefix)) return false;
 
-  return num >= 0 && num <= 32;
+  // If we've passed all checks, the CIDR notation is valid
+  return true;
+};
+
+/**
+ * Validates whether the given string is a valid binary IP address.
+ *
+ * @param {string} binaryIP - The binary IP address to validate.
+ * @returns {boolean} True if the binary IP address is valid, false otherwise.
+ *
+ * @example
+ * isValidBinaryIP('11000000.10101000.00000001.00000001'); // returns true
+ * isValidBinaryIP('11000000.10101000.00000001.0000000');  // returns false
+ * isValidBinaryIP('11000000.10101000.00000001.00000001.0'); // returns false
+ *
+ * @status DONE
+ *
+ */
+export const isValidBinaryIP = (binaryIP: string): boolean => {
+  // Check if the binary string is a valid length
+  if (binaryIP.length !== 35) return false;
+
+  // Split the binary string into octets
+  const octets = binaryIP.split(".");
+
+  // Check if we have exactly 4 octets
+  if (octets.length !== 4) return false;
+
+  // Validate each octet
+  octets.forEach((octet) => {
+    if (!isValidBinaryOctet(octet)) return false;
+  });
+
+  // If we've passed all checks, the binary string is valid
+  return true;
 };
