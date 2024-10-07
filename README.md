@@ -43,10 +43,6 @@ To install ip-navigator, run the following command in your terminal:
 npm install ip-navigator
 ```
 
-````
-
-Or if you're using pnpm:
-
 ```shellscript
 pnpm add ip-navigator
 ```
@@ -254,4 +250,3 @@ If you encounter any bugs or have suggestions for improvements, please report th
 - Any relevant code snippets or error messages
 
 Your feedback helps us improve ip-navigator for everyone!
-````
