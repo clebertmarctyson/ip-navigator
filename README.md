@@ -236,7 +236,7 @@ Please ensure that your code adheres to the existing style and that all tests pa
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE](https://github.com/clebertmarctyson/ip-navigator/blob/master/LICENSE) file for details.
 
 ## Bugs and Issues
 
