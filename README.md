@@ -1,6 +1,3 @@
-Here's the updated README.md for the ip-navigator project:
-
-````markdown
 # ip-navigator
 
 A comprehensive TypeScript package for IP address manipulation and subnet calculations.
@@ -45,6 +42,7 @@ To install ip-navigator, run the following command in your terminal:
 ```bash
 npm install ip-navigator
 ```
+
 ````
 
 Or if you're using pnpm:
@@ -256,3 +254,4 @@ If you encounter any bugs or have suggestions for improvements, please report th
 - Any relevant code snippets or error messages
 
 Your feedback helps us improve ip-navigator for everyone!
+````
