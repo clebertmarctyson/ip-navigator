@@ -26,7 +26,6 @@ import {
  * ipToBinary('192.168.1.1');  // returns '11000000.10101000.00000001.00000001'
  * ipToBinary('10.0.0.1');     // returns '00001010.00000000.00000000.00000001'
  *
- * @status DONE
  *
  */
 export const ipToBinary = (ipAddress: string): string => {
@@ -58,7 +57,6 @@ export const ipToBinary = (ipAddress: string): string => {
  * binaryToIP('11000000.10101000.00000001.00000001');  // returns '192.168.1.1'
  * binaryToIP('00001010.00000000.00000000.00000001');  // returns '10.0.0.1'
  *
- * @status DONE
  *
  */
 export const binaryToIP = (binaryIP: string): string => {
@@ -90,7 +88,6 @@ export const binaryToIP = (binaryIP: string): string => {
  * ipToInteger('192.168.1.1');  // returns 3232235777
  * ipToInteger('10.0.0.1');     // returns 167772161
  *
- * @status DONE
  *
  */
 export const ipToInteger = (ipAddress: string): number => {
@@ -120,7 +117,6 @@ export const ipToInteger = (ipAddress: string): number => {
  * integerToIP(3232235777);  // returns '192.168.1.1'
  * integerToIP(167772161);   // returns '10.0.0.1'
  *
- * @status DONE
  *
  */
 export const integerToIP = (integer: number): string => {
@@ -170,7 +166,6 @@ export const integerToIP = (integer: number): string => {
  * cidrToSubnetMask(24);  // returns '255.255.255.0'
  * cidrToSubnetMask(16);  // returns '255.255.0.0'
  *
- * @status DONE
  */
 export const cidrToSubnetMask = (prefix: number): string => {
   if (!isValidPrefix(prefix.toString())) {
@@ -204,7 +199,6 @@ export const cidrToSubnetMask = (prefix: number): string => {
  * subnetMaskToCIDR('255.255.255.0');  // returns 24
  * subnetMaskToCIDR('255.255.0.0');    // returns 16
  *
- * @status DONE
  */
 export const subnetMaskToCIDR = (subnetMask: string): number => {
   if (!isValidIPAddress(subnetMask) || !isValidSubnetMask(subnetMask)) {

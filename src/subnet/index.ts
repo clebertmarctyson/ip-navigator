@@ -20,7 +20,6 @@ import { ipToBinary, binaryToIP } from "../conversion";
  * - The function assumes both inputs are valid IPv4 addresses in dotted decimal notation.
  * - It performs a bitwise AND operation between each octet of the IP and subnet mask.
  *
- * @status DONE
  *
  */
 export const calculateNetworkAddress = (

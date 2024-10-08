@@ -20,7 +20,6 @@ import { ipToBinary } from "../conversion/index";
  * isValidIPAddress(' 192.168.1.1');  // returns false
  * isValidIPAddress('192.168.1.1 ');  // returns false
  *
- * @status DONE
  *
  */
 export const isValidIPAddress = (ipAddress: string): boolean => {
@@ -54,7 +53,6 @@ export const isValidIPAddress = (ipAddress: string): boolean => {
  * isValidSubnetMask('255.255.254.0');   // returns true
  * isValidSubnetMask('255.255.253.0');   // returns false
  *
- * @status DONE
  *
  */
 export const isValidSubnetMask = (subnetMask: string): boolean => {
@@ -91,7 +89,6 @@ export const isValidSubnetMask = (subnetMask: string): boolean => {
  * isValidCIDR('192.168.1.1/24.5'); // returns false (decimal prefix)
  * isValidCIDR('192.168.1.1/');     // returns false (empty prefix)
  *
- * @status DONE
  *
  */
 export const isValidCIDR = (cidr: string): boolean => {
@@ -128,7 +125,6 @@ export const isValidCIDR = (cidr: string): boolean => {
  * isValidBinaryIP('11000000.10101000.00000001.0000000');  // returns false
  * isValidBinaryIP('11000000.10101000.00000001.00000001.0'); // returns false
  *
- * @status DONE
  *
  */
 export const isValidBinaryIP = (binaryIP: string): boolean => {
