@@ -2,7 +2,7 @@ import {
   isValidBinaryOctet,
   isValidDecimalOctet,
   isValidPrefix,
-} from "../../lib/validation";
+} from "../lib/validation";
 
 import { ipToBinary } from "../conversion/index";
 

@@ -1,9 +1,9 @@
 import {
   convertBinaryOctetToDecimal,
   convertDecimalOctetToBinary,
-} from "../../lib/conversion";
+} from "../lib/conversion";
 
-import { isValidPrefix } from "../../lib/validation";
+import { isValidPrefix } from "../lib/validation";
 
 import {
   isValidIPAddress,
