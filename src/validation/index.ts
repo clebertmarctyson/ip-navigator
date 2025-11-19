@@ -138,9 +138,9 @@ export const isValidBinaryIP = (binaryIP: string): boolean => {
   if (octets.length !== 4) return false;
 
   // Validate each octet
-  octets.forEach((octet) => {
+  for (const octet of octets) {
     if (!isValidBinaryOctet(octet)) return false;
-  });
+  }
 
   // If we've passed all checks, the binary string is valid
   return true;

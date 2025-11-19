@@ -4,7 +4,6 @@
     "module": "commonjs",
     "outDir": "./dist",
     "rootDir": "./src",
-    "baseUrl": ".",
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
@@ -16,15 +15,3 @@
   "include": ["src/**/*"],
   "exclude": ["node_modules", "**/__tests__/*"]
 }
-
-// {
-//   "compilerOptions": {
-//     "target": "es5",
-//     "module": "commonjs",
-//     "declaration": true,
-//     "outDir": "./lib",
-//     "strict": true
-//   },
-//   "include": ["src"],
-//   "exclude": ["node_modules", "**/__tests__/*"]
-// }

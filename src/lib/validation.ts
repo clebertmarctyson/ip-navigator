@@ -19,9 +19,9 @@ export const isValidBinaryOctet = (binaryOctet: string): boolean => {
   if (binaryOctet.length !== 8) return false;
 
   // Validate each bit in the octet
-  Array.from(binaryOctet).forEach((bit) => {
+  for (const bit of binaryOctet) {
     if (bit !== "0" && bit !== "1") return false;
-  });
+  }
 
   // If we've passed all checks, the octet is valid
   return true;

@@ -128,27 +128,17 @@ export const integerToIP = (integer: number): string => {
     throw new Error("Input must be an integer between 0 and 4294967295");
   }
 
-  const base = 256;
+  const octets = [];
+  let remaining = integer;
 
-  let exponent = 3;
-  let temp = integer;
-  let octects = [];
-
-  while (exponent >= 0) {
-    // Calculate the octet value
-    const octet = Math.floor(temp / Math.pow(base, exponent));
-
-    // Add the octet to the list
-    octects.push(octet);
-
-    // Update the remaining value
-    temp = temp - octet * Math.pow(256, exponent);
-
-    // Move to the next octet
-    exponent--;
+  for (let exponent = 3; exponent >= 0; exponent--) {
+    const divisor = Math.pow(256, exponent);
+    const octet = Math.floor(remaining / divisor);
+    octets.push(octet);
+    remaining -= octet * divisor;
   }
 
-  return octects.join(".");
+  return octets.join(".");
 };
 
 /**

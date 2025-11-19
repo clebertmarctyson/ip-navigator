@@ -182,13 +182,25 @@ export const getSubnetInfo = (
   const totalHosts = Math.pow(2, 32 - cidr);
   const usableHosts = cidr === 31 ? 2 : totalHosts > 2 ? totalHosts - 2 : 0;
 
-  const availableIPs = calculateAvailableIPs(networkAddress, subnetMask);
-  const firstUsableHost =
-    availableIPs.length > 0 ? availableIPs[0] : networkAddress;
-  const lastUsableHost =
-    availableIPs.length > 0
-      ? availableIPs[availableIPs.length - 1]
-      : broadcastAddress;
+  // Calculate first and last usable hosts efficiently without generating all IPs
+  const networkInt = ipToInteger(networkAddress);
+  const broadcastInt = ipToInteger(broadcastAddress);
+
+  let firstUsableHost: string;
+  let lastUsableHost: string;
+
+  if (cidr === 31) {
+    // /31 networks are special - both addresses are usable (RFC 3021)
+    firstUsableHost = networkAddress;
+    lastUsableHost = broadcastAddress;
+  } else if (usableHosts > 0) {
+    firstUsableHost = integerToIP(networkInt + 1);
+    lastUsableHost = integerToIP(broadcastInt - 1);
+  } else {
+    // For /32 or other edge cases with no usable hosts
+    firstUsableHost = networkAddress;
+    lastUsableHost = broadcastAddress;
+  }
 
   return {
     networkAddress,

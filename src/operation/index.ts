@@ -1,6 +1,24 @@
 import { isValidIPAddress } from "../validation";
 import { ipToInteger, integerToIP } from "../conversion";
 
+// Pre-calculate private and special IP range boundaries for performance
+const IP_RANGES = {
+  PRIVATE_10_START: ipToInteger("10.0.0.0"),
+  PRIVATE_10_END: ipToInteger("10.255.255.255"),
+  PRIVATE_172_START: ipToInteger("172.16.0.0"),
+  PRIVATE_172_END: ipToInteger("172.31.255.255"),
+  PRIVATE_192_START: ipToInteger("192.168.0.0"),
+  PRIVATE_192_END: ipToInteger("192.168.255.255"),
+  LOOPBACK_START: ipToInteger("127.0.0.0"),
+  LOOPBACK_END: ipToInteger("127.255.255.255"),
+  LINK_LOCAL_START: ipToInteger("169.254.0.0"),
+  LINK_LOCAL_END: ipToInteger("169.254.255.255"),
+  MULTICAST_START: ipToInteger("224.0.0.0"),
+  MULTICAST_END: ipToInteger("239.255.255.255"),
+  RESERVED_START: ipToInteger("240.0.0.0"),
+  RESERVED_END: ipToInteger("255.255.255.255"),
+};
+
 /**
  * Returns the next IP address in sequential order.
  *
@@ -134,32 +152,29 @@ export const isPublicIP = (ipAddress: string): boolean => {
 
   // Check against private IP ranges
   if (
-    (ip >= ipToInteger("10.0.0.0") && ip <= ipToInteger("10.255.255.255")) ||
-    (ip >= ipToInteger("172.16.0.0") && ip <= ipToInteger("172.31.255.255")) ||
-    (ip >= ipToInteger("192.168.0.0") && ip <= ipToInteger("192.168.255.255"))
+    (ip >= IP_RANGES.PRIVATE_10_START && ip <= IP_RANGES.PRIVATE_10_END) ||
+    (ip >= IP_RANGES.PRIVATE_172_START && ip <= IP_RANGES.PRIVATE_172_END) ||
+    (ip >= IP_RANGES.PRIVATE_192_START && ip <= IP_RANGES.PRIVATE_192_END)
   ) {
     return false;
   }
 
   // Check against loopback IP range
-  if (ip >= ipToInteger("127.0.0.0") && ip <= ipToInteger("127.255.255.255")) {
+  if (ip >= IP_RANGES.LOOPBACK_START && ip <= IP_RANGES.LOOPBACK_END) {
     return false;
   }
 
   // Check against link-local IP range
-  if (
-    ip >= ipToInteger("169.254.0.0") &&
-    ip <= ipToInteger("169.254.255.255")
-  ) {
+  if (ip >= IP_RANGES.LINK_LOCAL_START && ip <= IP_RANGES.LINK_LOCAL_END) {
     return false;
   }
 
   // Check other special-use IP ranges
-  if (ip >= ipToInteger("224.0.0.0") && ip <= ipToInteger("239.255.255.255")) {
+  if (ip >= IP_RANGES.MULTICAST_START && ip <= IP_RANGES.MULTICAST_END) {
     return false; // Multicast
   }
 
-  if (ip >= ipToInteger("240.0.0.0") && ip <= ipToInteger("255.255.255.255")) {
+  if (ip >= IP_RANGES.RESERVED_START && ip <= IP_RANGES.RESERVED_END) {
     return false; // Reserved
   }
 
@@ -191,9 +206,9 @@ export const isPrivateIP = (ipAddress: string): boolean => {
   const ip = ipToInteger(ipAddress);
 
   return (
-    (ip >= ipToInteger("10.0.0.0") && ip <= ipToInteger("10.255.255.255")) ||
-    (ip >= ipToInteger("172.16.0.0") && ip <= ipToInteger("172.31.255.255")) ||
-    (ip >= ipToInteger("192.168.0.0") && ip <= ipToInteger("192.168.255.255"))
+    (ip >= IP_RANGES.PRIVATE_10_START && ip <= IP_RANGES.PRIVATE_10_END) ||
+    (ip >= IP_RANGES.PRIVATE_172_START && ip <= IP_RANGES.PRIVATE_172_END) ||
+    (ip >= IP_RANGES.PRIVATE_192_START && ip <= IP_RANGES.PRIVATE_192_END)
   );
 };
 
