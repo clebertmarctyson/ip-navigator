@@ -5,6 +5,9 @@
     "moduleResolution": "nodenext",
     "outDir": "./dist",
     "rootDir": "./src",
+    "declaration": true,
+    "declarationMap": false,
+    "sourceMap": false,
     "paths": {
       "@/*": ["./src/*"]
     },
@@ -19,5 +22,5 @@
     "strict": true
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "**/*.test.ts", "**/*.spec.ts"]
 }

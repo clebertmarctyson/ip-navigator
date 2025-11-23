@@ -6,9 +6,32 @@
   "types": "dist/index.d.ts",
   "type": "module",
   "files": [
-    "dist",
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
     "README.md"
   ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./validation": {
+      "types": "./dist/validation/index.d.ts",
+      "import": "./dist/validation/index.js"
+    },
+    "./conversion": {
+      "types": "./dist/conversion/index.d.ts",
+      "import": "./dist/conversion/index.js"
+    },
+    "./subnet": {
+      "types": "./dist/subnet/index.d.ts",
+      "import": "./dist/subnet/index.js"
+    },
+    "./operation": {
+      "types": "./dist/operation/index.d.ts",
+      "import": "./dist/operation/index.js"
+    }
+  },
   "scripts": {
     "build": "tsc && tsc-alias",
     "start": "pnpm build && node dist/index.js",
