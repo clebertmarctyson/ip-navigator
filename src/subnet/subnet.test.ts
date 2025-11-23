@@ -3,7 +3,7 @@ import {
   calculateBroadcastAddress,
   calculateAvailableIPs,
   getSubnetInfo,
-} from "../subnet/index";
+} from "@/subnet/index.js";
 
 describe("Subnet Calculations", () => {
   describe("calculateNetworkAddress", () => {

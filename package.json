@@ -4,37 +4,64 @@
   "description": "A tool for IP address manipulation and calculation",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "type": "module",
   "files": [
     "dist",
     "README.md"
   ],
-  "publishConfig": {
-    "access": "public"
-  },
   "scripts": {
-    "build": "tsc",
-    "prepublishOnly": "npm run build",
-    "dev": "tsx --watch src/index.ts",
-    "test": "jest --watch"
+    "build": "tsc && tsc-alias",
+    "start": "pnpm build && node dist/index.js",
+    "dev": "tsx watch src/index.ts",
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "test:watch": "jest --watch",
+    "prepublishOnly": "npm run build"
+  },
+  "homepage": "https://github.com/clebertmarctyson/ip-navigator#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/clebertmarctyson/ip-navigator.git"
+  },
+  "bugs": {
+    "url": "https://github.com/clebertmarctyson/ip-navigator/issues",
+    "email": "contact@marctysonclebert.com"
+  },
+  "funding": {
+    "type": "buymeacoffee",
+    "url": "https://www.buymeacoffee.com/marctysonclebert"
   },
   "keywords": [
     "ip",
-    "navigator",
-    "ip-navigator",
+    "ipv4",
     "ip-address",
-    "ip-address-navigator",
+    "network",
     "networking",
-    "networking-tools"
+    "subnet",
+    "cidr",
+    "ip-calculator",
+    "ip-navigator",
+    "tools",
+    "utilities"
   ],
-  "author": "Marc Tyson CLEBERT <marctysonclebert9@gmail.com>",
+  "author": {
+    "name": "Marc Tyson CLEBERT",
+    "email": "contact@marctysonclebert.com",
+    "url": "https://www.marctysonclebert.com"
+  },
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "devDependencies": {
+    "@jest/globals": "^30.2.0",
     "@types/jest": "^29.5.13",
-    "@types/node": "^22.7.5",
+    "@types/node": "^24.10.1",
     "jest": "^29.7.0",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
-    "tsx": "^4.19.1",
+    "tsc-alias": "^1.8.16",
+    "tsx": "^4.20.6",
     "typescript": "^5.6.2"
   }
 }

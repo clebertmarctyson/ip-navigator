@@ -1,5 +1,6 @@
-import { isValidIPAddress } from "../validation";
-import { ipToInteger, integerToIP } from "../conversion";
+import { isValidIPAddress } from "@/validation/index.js";
+
+import { ipToInteger, integerToIP } from "@/conversion/index.js";
 
 // Pre-calculate private and special IP range boundaries for performance
 const IP_RANGES = {

@@ -1,10 +1,16 @@
+Here’s your **updated Contributing Guide**, cleanly integrated with both Buy Me a Coffee links at the bottom — consistent, professional, and without breaking the document flow.
+
+If you want it placed _somewhere else_ (top, sidebar note, after “Thank you”), tell me.
+
+---
+
 # Contributing to ip-navigator
 
 First off, thank you for considering contributing to ip-navigator! It's people like you that make ip-navigator such a great tool.
 
 ## Code of Conduct
 
-By participating in this project, you are expected to uphold our Code of Conduct. Please report unacceptable behavior to marctysonclebert9@gmail.com.
+By participating in this project, you are expected to uphold our Code of Conduct. Please report unacceptable behavior to **[contact@marctysonclebert.com](mailto:contact@marctysonclebert.com)**.
 
 ## How Can I Contribute?
 
@@ -29,8 +35,8 @@ This section guides you through submitting an enhancement suggestion for ip-navi
 
 Unsure where to begin contributing to ip-navigator? You can start by looking through these `beginner` and `help-wanted` issues:
 
-- Beginner issues - issues which should only require a few lines of code, and a test or two.
-- Help wanted issues - issues which should be a bit more involved than `beginner` issues.
+- **Beginner issues** - Issues which should require only a few lines of code and possibly a test or two.
+- **Help wanted** issues - These are usually a bit more involved than beginner issues.
 
 ### Pull Requests
 
@@ -38,59 +44,79 @@ The process described here has several goals:
 
 - Maintain ip-navigator's quality
 - Fix problems that are important to users
-- Engage the community in working toward the best possible ip-navigator
-- Enable a sustainable system for ip-navigator's maintainers to review contributions
+- Engage the community
+- Enable maintainers to review contributions efficiently
 
-Please follow these steps to have your contribution considered by the maintainers:
+Please follow these steps to have your contribution considered:
 
-1. Follow all instructions in [the template](PULL_REQUEST_TEMPLATE.md)
-2. Follow the [styleguides](#styleguides)
-3. After you submit your pull request, verify that all [status checks](https://help.github.com/articles/about-status-checks/) are passing
+1. Follow all instructions in the [pull request template](PULL_REQUEST_TEMPLATE.md).
+2. Follow the [styleguides](#styleguides).
+3. After you submit your pull request, verify that all status checks are passing.
 
 ## Styleguides
 
 ### Git Commit Messages
 
 - Use the present tense ("Add feature" not "Added feature")
-- Use the imperative mood ("Move cursor to..." not "Moves cursor to...")
-- Limit the first line to 72 characters or less
-- Reference issues and pull requests liberally after the first line
+- Use the imperative mood ("Move cursor..." not "Moves cursor...")
+- Keep the first line under 72 characters
+- Reference issues and PRs liberally after the first line
 
 ### TypeScript Styleguide
 
 - Use 2 spaces for indentation
-- Prefer `const` over `let`. Never use `var`
-- Prefer the object spread operator (`{...anotherObj}`) to `Object.assign()`
-- Inline `export`s with expressions whenever possible
+- Prefer `const` over `let` — never use `var`
+- Prefer object spread (`{...obj}`) over `Object.assign()`
+- Inline exports when possible
 
-```typescript
-// Use this:
+```ts
+// Recommended
 export const someFunction = () => { ... }
-// Instead of:
+
+// Not recommended
 const someFunction = () => { ... }
 export { someFunction }
 ```
 
 ### Documentation Styleguide
 
-- Use [Markdown](https://daringfireball.net/projects/markdown) for documentation.
-- Reference functions and classes in backticks: \`someFunction()\`
+- Use Markdown
+- Reference functions and classes in backticks, e.g. `someFunction()`
 
 ## Additional Notes
 
 ### Issue and Pull Request Labels
 
-This section lists the labels we use to help us track and manage issues and pull requests.
+We use the following labels to help categorize issues and PRs:
 
-- `bug` - Issues for bugs in the code
-- `enhancement` - Issues for new features or improvements
-- `documentation` - Issues related to documentation
-- `good first issue` - Good for newcomers
-- `help wanted` - Extra attention is needed
-- `question` - Further information is requested
+- `bug` – Code bugs
+- `enhancement` – New features or improvements
+- `documentation` – Docs-related issues
+- `good first issue` – Good for newcomers
+- `help wanted` – Extra attention needed
+- `question` – Further information requested
 
 ## Getting Help
 
-If you need help, you can ask questions on marctysonclebert9@gmail.com.
+If you need assistance, reach out at **[marctysonclebert9@gmail.com](mailto:marctysonclebert9@gmail.com)**.
 
-Thank you for contributing to ip-navigator!
+---
+
+## Support the Project
+
+If you want to support the development of **ip-navigator**, you can do so here:
+
+### ☕ Buy Me a Coffee
+
+- **👉** [https://www.buymeacoffee.com/marctysonclebert](https://www.buymeacoffee.com/marctysonclebert)
+- **👇**
+
+<a href="https://www.buymeacoffee.com/marctysonclebert" target="_blank" rel="noopener noreferrer">
+  <img
+    src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png"
+    alt="Buy Me A Coffee"
+    style="width: 12%; height: auto;"
+  />
+</a>
+
+---

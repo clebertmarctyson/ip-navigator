@@ -6,7 +6,7 @@ import {
   isPrivateIP,
   getIPRange,
   compareIPAddresses,
-} from "./index";
+} from "@/operation/index.js";
 
 describe("IP Address Operations", () => {
   describe("getNextIPAddress", () => {

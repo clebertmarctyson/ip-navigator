@@ -1,7 +1,7 @@
-import { subnetMaskToCIDR } from "../conversion";
-import { ipToInteger, integerToIP } from "../conversion";
-import { isValidIPAddress, isValidSubnetMask } from "../validation";
-import { ipToBinary, binaryToIP } from "../conversion";
+import { subnetMaskToCIDR } from "@/conversion/index.js";
+import { ipToInteger, integerToIP } from "@/conversion/index.js";
+import { isValidIPAddress, isValidSubnetMask } from "@/validation/index.js";
+import { ipToBinary, binaryToIP } from "@/conversion/index.js";
 
 /**
  * Calculates the network address based on an IP address and subnet mask.

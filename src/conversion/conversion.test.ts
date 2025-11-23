@@ -5,7 +5,7 @@ import {
   integerToIP,
   cidrToSubnetMask,
   subnetMaskToCIDR,
-} from "../conversion/index";
+} from "@/conversion/index.js";
 
 // Describe the test suite
 describe("IP Address Conversion", () => {

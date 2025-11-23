@@ -3,6 +3,8 @@
 [![npm version](https://img.shields.io/npm/v/ip-navigator.svg)](https://www.npmjs.com/package/ip-navigator)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+[![Buying me a coffee](https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png)](https://www.buymeacoffee.com/marctysonclebert)
+
 A comprehensive TypeScript package for IP address manipulation and subnet calculations.
 
 ## Table of Contents
@@ -285,6 +287,15 @@ Please ensure that your code adheres to the existing style and that all tests pa
 
 This project is licensed under the MIT License. See the [LICENSE](https://github.com/clebertmarctyson/ip-navigator/blob/master/LICENSE) file for details.
 
+## Author
+
+**Marc Tyson CLEBERT <contact@marctysonclebert.com>**
+
+- Website: [marctysonclebert.com](https://www.marctysonclebert.com)
+- GitHub: [@clebertmarctyson](https://github.com/clebertmarctyson)
+- Twitter/X: [@ClebertTyson](https://x.com/ClebertTyson)
+- Buy me a coffee: [Support my work](https://www.buymeacoffee.com/marctysonclebert)
+
 ## Bugs and Issues
 
 If you encounter any bugs or have suggestions for improvements, please report them on our [GitHub Issues page](https://github.com/clebertmarctyson/ip-navigator/issues). When reporting an issue, please include:
@@ -297,3 +308,12 @@ If you encounter any bugs or have suggestions for improvements, please report th
 - Any relevant code snippets or error messages
 
 Your feedback helps us improve ip-navigator for everyone!
+
+## Support the Project
+
+If `ip-navigator` has been helpful to you, consider:
+
+- ⭐ Starring the repo
+- ☕ [Buying me a coffee](https://www.buymeacoffee.com/marctysonclebert)
+
+---

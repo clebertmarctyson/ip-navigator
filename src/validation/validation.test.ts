@@ -1,4 +1,8 @@
-import { isValidIPAddress, isValidSubnetMask, isValidCIDR } from "./index";
+import {
+  isValidIPAddress,
+  isValidSubnetMask,
+  isValidCIDR,
+} from "@/validation/index.js";
 
 describe("IP Address Validation", () => {
   describe("isValidIPAddress", () => {
